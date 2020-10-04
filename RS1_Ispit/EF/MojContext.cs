@@ -27,7 +27,7 @@ namespace RS1_Ispit_asp.net_core.EF
         }
 
 
-        public DbSet<Predmet> Predmet { get; set; }
+        public DbSet<SelectListItem> Predmet { get; set; }
         public DbSet<DodjeljenPredmet> DodjeljenPredmet { get; set; }
         public DbSet<Ucenik> Ucenik { get; set; }
         public DbSet<OdjeljenjeStavka> OdjeljenjeStavka { get; set; }

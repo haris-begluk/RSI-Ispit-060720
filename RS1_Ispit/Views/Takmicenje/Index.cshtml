@@ -1,0 +1,40 @@
+﻿@model RS1_Ispit_asp.net_core.ViewModels.TakmicenjeVM
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Prikaz Takmicenja</h2>
+
+
+<div class="form-group col-md-4 col-sm-4">
+    <label for="@Model.Skole">Skole</label>
+    <select asp-for="@Model.SkolaId" asp-items="@Model.Skole" class="form-control ">
+    </select>
+</div>
+
+
+<div id="takmicenja">
+
+</div>
+<a ajax-poziv="da" href="/Takmicenje/DodajTakmicenje" ajax-rezultat="dodajTakmicenje" class="btn btn-primary">Dodaj Takmicenje</a>
+<div id="dodajTakmicenje" class="row">
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $.get("/Takmicenje/SkolaTakmicenja", function (result) {
+            $("#takmicenja").html(result);
+        });
+        $("#SkolaId").change(function () {
+            var selectedValue = $(this).children("option:selected").val();
+            $.get("/Takmicenje/SkolaTakmicenja?id=" + selectedValue, function (result) {
+                $("#takmicenja").html(result);
+            });
+        });
+    });
+</script>
+
+
+

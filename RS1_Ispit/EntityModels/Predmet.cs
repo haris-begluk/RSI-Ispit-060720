@@ -1,6 +1,6 @@
 ﻿namespace RS1_Ispit_asp.net_core.EntityModels
 {
-    public class Predmet
+    public class SelectListItem
     {
         public int Id { get; set; }
         public string Naziv{ get; set; }

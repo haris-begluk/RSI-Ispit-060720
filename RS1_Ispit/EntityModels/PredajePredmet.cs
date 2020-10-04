@@ -8,7 +8,7 @@ namespace RS1_Ispit_asp.net_core.EntityModels
         public int Id { get; set; }
 
         [ForeignKey(nameof(PredmetID))]
-        public virtual Predmet Predmet { get; set; }
+        public virtual SelectListItem Predmet { get; set; }
         public int PredmetID { get; set; }
 
 

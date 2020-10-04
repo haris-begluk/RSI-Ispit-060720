@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using RS1_Ispit_asp.net_core.EntityModels;
 
 namespace RS1_Ispit_asp.net_core.EF
@@ -20,7 +21,7 @@ namespace RS1_Ispit_asp.net_core.EF
             int maxUcenici = 15;
             int maxOdjeljenja = 2;
 
-            var predmeti = new List<Predmet>();
+            var predmeti = new List<SelectListItem>();
             var odjeljenja = new List<Odjeljenje>();
             var skolskeGodine = new List<SkolskaGodina>();
             var skole = new List<Skola>();
@@ -32,10 +33,10 @@ namespace RS1_Ispit_asp.net_core.EF
 
             for (int i = 1; i <= maxRazredi; i++)
             {
-             
-                predmeti.Add(new Predmet { Naziv = "Informtika", Razred = i });
-                predmeti.Add(new Predmet { Naziv = "Matematika", Razred = i });
-                predmeti.Add(new Predmet { Naziv = "Fizika", Razred = i });
+
+                predmeti.Add(new SelectListItem { Naziv = "Informtika", Razred = i });
+                predmeti.Add(new SelectListItem { Naziv = "Matematika", Razred = i });
+                predmeti.Add(new SelectListItem { Naziv = "Fizika", Razred = i });
 
 
             }
@@ -64,6 +65,8 @@ namespace RS1_Ispit_asp.net_core.EF
                 }
 
 
+
+
                 foreach (SkolskaGodina skolskaGodina in skolskeGodine)
                 {
                     for (int bRazred = 1; bRazred <= maxRazredi; bRazred++)
@@ -81,7 +84,7 @@ namespace RS1_Ispit_asp.net_core.EF
                                 };
                             odjeljenja.Add(newOdjeljenje);
 
-                            foreach (Predmet p in predmeti.Where(p => newOdjeljenje.Razred == bRazred))
+                            foreach (SelectListItem p in predmeti.Where(p => newOdjeljenje.Razred == bRazred))
                             {
                                 predajePredmete.Add(new PredajePredmet
                                 {
@@ -107,7 +110,7 @@ namespace RS1_Ispit_asp.net_core.EF
                                     BrojUDnevniku = bUcenik,
                                 };
                                 odjeljenjeStavke.Add(odjeljenjeStavka);
-                                foreach (Predmet p in predmeti.Where(q => q.Razred == bRazred))
+                                foreach (SelectListItem p in predmeti.Where(q => q.Razred == bRazred))
                                 {
                                     int zakljucnoKrajGodine = MyRandomExtensions.RandomOcjena();
 
@@ -127,6 +130,8 @@ namespace RS1_Ispit_asp.net_core.EF
 
                     }
                 }
+
+
             }
             context.Nastavnik.AddRange(nastavnici);
             context.Predmet.AddRange(predmeti);
@@ -139,9 +144,49 @@ namespace RS1_Ispit_asp.net_core.EF
             context.Nastavnik.AddRange(nastavnici);
             context.DodjeljenPredmet.AddRange(dodjeljenPredmet);
             context.SaveChanges();
+            var skoleC = context.Skola.ToList();
+            foreach (var item in skoleC)
+            {
+                var pred = context.Predmet;
+                var takmicenja = new List<Takmicenje>();
+                var takmicenjeUcesnik = new List<TakmicenjeUcesnik>();
+                for (int j = 0; j < pred.Count(); j++)
+                {
+                    var predmet = pred.ToList().MyRandom();
+                    takmicenja.Add(new Takmicenje
+                    {
+                        SkolaId = item.Id,
+                        PredmetId = predmet.Id,
+                        Datum = DateTime.Now,
+                        Razred = predmet.Razred,
+                        Zakljucaj = false
+                    });
+                }
+                context.Takmicenje.AddRange(takmicenja);
+                context.SaveChanges();
+
+                var odje = context.OdjeljenjeStavka.ToList();
+                var takm = context.Takmicenje.ToList();
+                for (int i = 0; i < 50; i++)
+                {
+                    takmicenjeUcesnik.Add(new TakmicenjeUcesnik
+                    {
+                        TakmicenjeId = takm.MyRandom().Id,
+                        OdjeljenjeStavkaId = odje.MyRandom().Id,
+                        Pristupio = new List<bool> { true, false }.MyRandom(),
+                        Bodovi = MyRandomExtensions.RandomBodova()
+
+                    });
+                }
+                context.TakmicenjeUcesnik.AddRange(takmicenjeUcesnik);
+                context.SaveChanges();
+                //Task.Delay(10000).Wait();
+            }
+
         }
 
-       
+
+
     }
     public static class MyRandomExtensions
     {
@@ -166,6 +211,13 @@ namespace RS1_Ispit_asp.net_core.EF
             int x = random.Next(1, 15);
             if (x > 1)
                 x = x % 4 + 2;
+            return x;
+        }
+        public static int RandomBodova()
+        {
+            int x = random.Next(1, 100);
+            //if (x > 30 && x < 70)
+            //    return 0;
             return x;
         }
     }

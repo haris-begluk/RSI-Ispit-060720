@@ -1,0 +1,24 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model RS1_Ispit_asp.net_core.ViewModels.DodajTakmicenjeVM
+
+<form ajax-poziv="da" action="/Takmicenje/DodajTakmicenje" ajax-rezultat="dodajTakmicenje" class="form-horizontal col-md-4 col-sm-4">
+    <div class="form-group">
+        <label>Predmet</label>
+        <select asp-for="PredmetId" asp-items="@Model.Predmeti" class="form-control">
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Skola</label>
+        <select asp-for="DTSkolaId" asp-items="@Model.DTSkole" class="form-control">
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="Datum" class="control-label"></label>
+        <input asp-for="Datum" value="@Model.Datum.ToString("dd.MM.yyyy")" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Snimi" class="btn btn-default" />
+    </div>
+</form>

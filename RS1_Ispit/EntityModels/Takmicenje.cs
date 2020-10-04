@@ -11,7 +11,7 @@ namespace RS1_Ispit_asp.net_core.EntityModels
         public int SkolaId { get; set; }
         public Skola Skola { get; set; }
         public int PredmetId { get; set; }
-        public Predmet Predmet { get; set; }
+        public SelectListItem Predmet { get; set; }
         public DateTime Datum { get; set; }
         public int Razred { get; set; }
         public bool Zakljucaj { get; set; }
